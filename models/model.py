@@ -11,7 +11,7 @@ db = SQLAlchemy(application)
 Base = declarative_base()
 
 class User(Base):
-	__tablename__ = 'user'
+	__tablename__ = 'customer'
 
 	id = db.Column('id', UUIDType(binary=False), primary_key=True)
 	username = db.Column('username', db.Unicode, unique=True)
@@ -49,8 +49,9 @@ class TestResult(Base):
 	id = db.Column('id', UUIDType(binary=False), primary_key=True)
 	result = db.Column('result', db.Unicode)
 	test_id = db.Column('test_id', UUIDType(binary=False), db.ForeignKey('test.id'))
-	user_id = db.Column('user_id', UUIDType(binary=False), db.ForeignKey('user.id'))
 	time = db.Column('time', db.DateTime, server_default=func.now())
+
+	test = db.relationship('Test', foreign_keys=test_id)
 
 class Company(Base):
 	__tablename__ = "company"
@@ -84,7 +85,5 @@ class DocumentElement(Base):
 	master_document = db.Column('master_document', UUIDType(binary=False), db.ForeignKey('document.id'))
 	document_element_name = db.Column('document_element_name', db.Unicode)
 
-	companyid = db.relationship("Company", foreign_keys=company_id)
-	companyname = db.relationship("Company", foreign_keys=company_name)
 	document = db.relationship("Document", foreign_keys=master_document)
 

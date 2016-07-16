@@ -1,28 +1,68 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
+from passlib.hash import bcrypt
+import uuid
 
 app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def index():
-	return "Hello world!"
+	return render_template("index.html")
 
-@app.route('/signup', methods=['POST'])
+@app.route('/signup', methods=['POST', 'GET'])
 def signup():
-	return 'Signup page'
+	if request.method == "POST":
+		data = request.form()
+		username = data['username']
+		password = bcrypt.encrypt(data['password'])
+		email = data['email']
+		name = data['name']
+		id = uuid.uuid4()
 
-@app.route('/authtoken', methods=['POST'])
-def authtoken():
-	return 'Auth token page'
+		try:
+			data = User(id=id, username=username, password=password, email=email, name=name)
+			db.session.add(data)
+			db.session.commit()
 
-@app.route('/company', methods=['POST'])
+		except:
+			db.session.rollback()
+			return 'Insert failed'
+			raise
+
+		finally:
+			db.session.close()
+
+	elif request.method == "GET":
+		return "User signup page"
+
+# @app.route('/authtoken', methods=['POST'])
+# def authtoken():
+# 	return 'Auth token page'
+
+@app.route('/company', methods=['POST', 'GET'])
 def company_signup():
 	if request.method == 'POST':
 		data = request.form()
 		name = data['name']
+		jwt_t = str(request.headers.get('JWT-Auth'))
+		payload = jwt.decode(jwt_t, signkey, algorithms=['HS512']) #Decoding JWT token
+		jwt_id = payload['uuid'] #Getting Username in payload of JWT to ensure people cant upload referencing other peoples usernames 
+		id = uuid.uuid4()
 
 		try:
-			
-	return "Company sign up page"
+			data = Company(id=id, name=name, user_id=user_id)
+			db.session.add(data)
+			db.session.commit()
+
+		except:
+			db.session.rollback()
+			return "Insert failed"
+			raise
+
+		finally:
+			db.session.close()
+
+	elif request.method == 'GET':
+		return "Company sign up page"
 
 @app.route('/company/<id>', methods=["GET", "PATCH"])
 def company_information(id):
