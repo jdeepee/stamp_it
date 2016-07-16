@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+
+<body>
+	<div class="container">
+		<h4>Please Login:</h4>
+		<br>
+		{% from "formhelpers.html" import render_field %}
+		<form method=post action="/login/?username={{ mac }}">
+			<dl>
+				{{render_field(form.email)}}
+				{{render_field(form.password)}}
+			</dl>
+			<p><input type=submit value=Login></p>
+		</form>
+		<div class="container" style="min-height:100% width:80%">
+			{% with messages = get_flashed_messages() %}
+			  {% if messages %}
+			    {% for message in messages %}
+					{{message}}
+				{% endfor %}
+			  {% endif %}
+			{% endwith %}
+		</div>
+		{% if error %}
+			<p class="error"><strong>Error:</strong>{{error}}</p>
+		{% endif %}
+	</div>
+</body>
