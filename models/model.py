@@ -4,6 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import UUIDType
 from ..config import *
+from ..application import application
 
 engine = create_engine(application.config['SQLALCHEMY_DATABASE_URI'])
 db = SQLAlchemy(application)
@@ -62,6 +63,9 @@ class Company(Base):
 
     user = db.relationship('User', foreign_keys=user_id)
 
+    def __json__(self):
+		return ['name']
+
 class Document(Base):
 	__tablename__ = "document"
 
@@ -76,6 +80,9 @@ class Document(Base):
 	companyid = db.relationship("Company", foreign_keys=company_id)
 	companyname = db.relationship("Company", foreign_keys=company_name)
 
+	def __json__(self):
+		return ['company_id', 'company_name', 'blockchain_block', 'blockchain_transaction', 'document_name', 'time_uploaded']
+
 class DocumentElement(Base):
 	__tablename__ = "document_element"
 
@@ -86,4 +93,7 @@ class DocumentElement(Base):
 	document_element_name = db.Column('document_element_name', db.Unicode)
 
 	document = db.relationship("Document", foreign_keys=master_document)
+
+	def __json__(self):
+		return ['blockchain_block', 'blockchain_transaction', 'master_document', 'document_element_name']
 
