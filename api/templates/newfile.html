@@ -3,8 +3,10 @@
 <title>Upload new File</title>
 <h1>Upload new File</h1>
 <form action="/company/newdocument" method=post enctype=multipart/form-data>
-  <p><input type=file name=file>
-     <input type=submit value=Upload>
+  <p>
+  	<input type=file name=file><br>
+  	Company ID: <input type="text" name=id><br>
+    <input type=submit value=Upload>
   </p>
 </form>
 </html>
