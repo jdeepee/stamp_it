@@ -17,7 +17,11 @@ def authtoken():
 @app.route('/company', methods=['POST'])
 def company_signup():
 	if request.method == 'POST':
+		data = request.form()
+		name = data['name']
 
+		try:
+			
 	return "Company sign up page"
 
 @app.route('/company/<id>', methods=["GET", "PATCH"])
