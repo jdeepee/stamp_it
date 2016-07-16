@@ -91,6 +91,7 @@ def new_document():
 
 		#Celery task here to upload hash to blockchain and wait for transaction and then update database values
 		#After update occurs also to check to see if anyone who is interested in this company should be notified
+		#Also insert into document elements with each element from the document
 
 	return render_template('newfile.html')
 
@@ -161,24 +162,31 @@ def interest_creation():
 			db.session.close()
 
 		return redirect('/interest'+id, code=200)
-
 	return render_template("interest.html", form=form, error=error)
 
-@application.route('/interest/<id>', methods=["GET", "PATCH"])
+@application.route('/interest/<id>', methods=["GET"])
 def interest_information(id):
-	pass
+	error = ''
 
-@application.route('/test', methods=["GET", 'POST'])
-def test_creation():
-	pass
+	if request.method == 'GET':
+		data = db.session.query(Interest, Test).join(Test).filter(Interest.id == id).all()
 
-@application.route('/test/<id>', methods=['GET', 'PATCH'])
-def test_information(id):
-	pass
+		if data is None:
+			return render_template("interests.html", data=None)
+
+		return render_template("interests.html", data=data)
 
 @application.route('/test/<id>/result/<result_id>', methods=["GET", "POST"])
 def test_result_information(id, result_id):
-	pass
+	error = ''
+
+	if request.method == "GET":
+		data = db.session.query(TestResult).filter(TestResult.id == result_id, TestResult.test_id == id).first()
+
+		if data is None:
+			return render_template('results.html', data=None)
+
+		return render_template('results.html', data=data)
 
 if __name__ == '__main__':
 	application.run()
