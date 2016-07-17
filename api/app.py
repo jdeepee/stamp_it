@@ -111,7 +111,7 @@ def company_information(id):
 
 		response = json.dumps(data, cls=JoinEncoder)
 		response = json.loads(response)
-		data = [{"Company id": response[0]['Company']['id'], "Company name": response[0]['Company']['name']},{"Document": response[0]['Document']},{"Document Elements": response[0]['DocumentElement']}]
+		data = [{"Company id": response[0]['Company']['id'], "Company name": response[0]['Company']['name']},{"Document name": response[0]['Document']['document_name'], "Blockchain transaction": response[0]['Document']['blockchain_transaction'], "Time Uploaded": response[0]['Document']["time_uploaded"]},{"Document Elements": response[0]['DocumentElement']}]
 		return render_template("individual_company.html", data=data)
 
 @application.route('/company/<id>/newdocument', methods=["GET", "POST"])
@@ -176,6 +176,15 @@ def new_document(id):
 		#return redirect('/company/'+id, code=200)
 	return render_template('new_document.html')
 
+# @application.route('/insertdata', methods=["GET"])
+# def go():
+# 	id=uuid.uuid4()
+# 	data = Document(id=id, company_id="efa1ca03-b51c-459d-b7a0-8a3f2d47c2d7", company_name="ChainSafe", blockchain_transaction="76e01626f8be7c14e603c5be07f5f28192f64c458cd07080a0913ba3d29dc15", document_name="Balance Sheet")
+# 	db.session.add(data)
+# 	db.session.commit()
+# 	db.session.close()
+
+# 	return 'Done'
 @application.route('/company/<id>/document/<id_document>', methods=["GET"])
 def company_document(id, id_document):
 	if request.method == "GET":
@@ -242,7 +251,7 @@ def interest_creation():
 		return redirect('/interest'+id, code=200)
 	return render_template("new_interest.html", form=form, error=error)
 
-@application.route('/interests', methods=["GET"])
+@application.route('/interests/user/ddf7140c-2175-4c3c-b39f-86235ad0786e/', methods=["GET"])
 def all_interests():
 	error = ''
 

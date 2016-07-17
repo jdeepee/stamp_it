@@ -74,7 +74,7 @@ class Document(Base):
 	companyid = db.relationship("Company", foreign_keys=company_id)
 
 	def __json__(self):
-		return ['company_id', 'company_name', 'blockchain_block', 'blockchain_transaction', 'document_name', 'time_uploaded']
+		return ['company_id', 'company_name', 'blockchain_transaction', 'document_name', 'time_uploaded']
 
 class DocumentElement(Base):
 	__tablename__ = "document_elemnet"
@@ -87,5 +87,5 @@ class DocumentElement(Base):
 	document = db.relationship("Document", foreign_keys=master_document)
 
 	def __json__(self):
-		return ['blockchain_block', 'blockchain_transaction', 'master_document', 'document_element_name']
+		return ['blockchain_transaction', 'master_document', 'document_element_name']
 
