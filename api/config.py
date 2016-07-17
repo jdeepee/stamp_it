@@ -1,4 +1,5 @@
-from application import application, UPLOAD_FOLDER
+from app import application
 
-application.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://josh:password@localhost/stamp_it_db'
-application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+application.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://Josh:password@localhost/chain_safe'
+application.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
+application.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
