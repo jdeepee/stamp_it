@@ -1,4 +1,4 @@
-import urllib2, urllib, json, hashlib
+import urllib2, urllib, json, hashlib, os
 from coinbase.wallet.client import Client
 
 file_hash = str(hashlib.sha256(open('/Users/Josh/Documents/stamp_it/data_examples/MasterDataBook v2.xlsx', 'rb').read()).hexdigest())
